@@ -35,6 +35,9 @@ gem "sidekiq-scheduler", ">= 3.0.1"
 gem "sprockets-rails"
 gem "strong_migrations"
 gem "vite_rails"
+gem "nokogiri"
+gem "selenium-webdriver"
+gem "net-http"
 
 group :development do
   gem "annotate", "~> 3.0"
