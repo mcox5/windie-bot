@@ -1,4 +1,6 @@
 class Spot < ApplicationRecord
+  has_many :user_spots, dependent: :destroy
+  has_many :users, through: :user_spots
 end
 
 # == Schema Information
