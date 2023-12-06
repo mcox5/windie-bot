@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  namespace :api, defaults: { format: :json } do
-    namespace :internal do
+
+  scope path: '/api' do
+    api_version(module: 'Api::V1', path: { value: 'v1' }, defaults: { format: 'json' }) do
+      namespace :webhook do
+        post 'twilio_whatsapp_chat', to: 'chat#handle_user_chat'
+      end
     end
   end
   devise_for :users
   mount CoverImageUploader.derivation_endpoint => "/derivations/cover_image"
   mount Sidekiq::Web => '/queue'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
 end
