@@ -19,7 +19,9 @@ module Windie
 
     config.before_configuration do
       require Rails.root.join('lib/environment_variables.rb')
+      require Rails.root.join('lib/twilio_constants.rb')
       require Rails.root.join('lib/windguru_locations.rb')
+      require Rails.root.join('lib/whatsapp_messages.rb')
     end
     config.i18n.fallbacks = [:es, :en]
     config.i18n.default_locale = 'es-CL'
