@@ -38,6 +38,10 @@ gem "vite_rails"
 gem "nokogiri"
 gem "selenium-webdriver"
 gem "net-http"
+gem "twilio-ruby"
+gem "aasm"
+gem 'responders'
+
 
 group :development do
   gem "annotate", "~> 3.0"

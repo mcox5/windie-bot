@@ -8,6 +8,8 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (5.5.0)
+      concurrent-ruby (~> 1.0)
     actioncable (7.0.8)
       actionpack (= 7.0.8)
       activesupport (= 7.0.8)
@@ -125,6 +127,7 @@ GEM
       aws-sigv4 (~> 1.6)
     aws-sigv4 (1.6.1)
       aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.2.0)
     bcrypt (3.1.19)
     better_errors (2.10.1)
       erubi (>= 1.0.0)
@@ -195,6 +198,11 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.2)
       i18n (>= 1.8.11, < 2)
+    faraday (2.7.11)
+      base64
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (3.0.2)
     ffi (1.16.3)
     formatador (1.1.0)
     formtastic (4.0.0)
@@ -247,6 +255,7 @@ GEM
     json-schema (3.0.0)
       addressable (>= 2.8)
     jsonapi-renderer (0.2.2)
+    jwt (2.7.1)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)
@@ -558,6 +567,10 @@ GEM
     thor (1.3.0)
     tilt (2.3.0)
     timeout (0.4.1)
+    twilio-ruby (6.8.1)
+      faraday (>= 0.9, < 3.0)
+      jwt (>= 1.5, < 3.0)
+      nokogiri (>= 1.6, < 2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2023.3)
@@ -598,6 +611,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aasm
   activeadmin (~> 2.9)
   activeadmin_addons (~> 2.0.0.beta.0)
   annotate (~> 3.0)
@@ -638,6 +652,7 @@ DEPENDENCIES
   rails-i18n
   recipient_interceptor
   redis-actionpack
+  responders
   rspec-nc
   rspec-rails
   rspec_junit_formatter (~> 0.4)
@@ -664,6 +679,7 @@ DEPENDENCIES
   spring
   sprockets-rails
   strong_migrations
+  twilio-ruby
   tzinfo-data
   vite_rails
   webdrivers
