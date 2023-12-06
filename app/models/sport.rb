@@ -1,6 +1,8 @@
 class Sport < ApplicationRecord
   has_many :user_sports, dependent: :destroy
   has_many :users, through: :user_sports
+
+  enum sport_name: { surf: 0, kitesurf: 1, pesca: 2 }
 end
 
 # == Schema Information
@@ -11,4 +13,5 @@ end
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  sport_name :integer
 #
