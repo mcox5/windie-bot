@@ -20,15 +20,17 @@ SPANISH_MONTHS = {
 class ScrappingWindguruJob < ApplicationJob
   queue_as :default
 
-  def perform(location)
-    get_report_info_json(location)
+  def perform(location_name)
+    spot = Spot.find_by(name: location_name)
+    spot.update!(report: get_report_info_json(location_name).to_json, report_last_update: Time.zone.today)
   end
 
   private
 
-  def get_report_info_json(location)
+  def get_report_info_json(location_name)
     puts 'Starting web_scrapping_windguru....'
-    url = "https://www.windguru.cz/#{location}"
+    windguru_code = WindguruLocations.code(location_name)
+    url = "https://www.windguru.cz/#{windguru_code}"
     begin
       options = Selenium::WebDriver::Chrome::Options.new
       options.add_argument('--headless --disable-dev-shm-usage --no-sandbox --disable-gpu --disable-software-rasterizer')
@@ -152,7 +154,7 @@ class ScrappingWindguruJob < ApplicationJob
       report[day][hour] = {
         "wave" => wave,
         "wind" => wind,
-        "windDirection" => direction,
+        "wind_direction" => direction,
         "period" => wave_period
       }
     end
