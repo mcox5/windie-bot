@@ -45,7 +45,6 @@ class ScrappingWindguruJob < ApplicationJob
       driver.get(url)
       sleep(6)
       windguru_table = Nokogiri::HTML(driver.page_source).search('#forecasts-page-content .tabulka')
-      puts 'esta es la tabla...', windguru_table
       report_info = transform_report_to_json(parse_windguru_table(windguru_table))
 
       tide_button = driver.find_elements(:css, '.wg-table-menu')[0].find_elements(:css, 'li')[6].find_elements(:css, 'a').first
@@ -57,6 +56,7 @@ class ScrappingWindguruJob < ApplicationJob
 
       report_tide = get_report_tide(driver)
       complete_report = fusion_reports(report_info, report_tide)
+      puts 'este es el reporte', complete_report
 
       complete_report
     rescue StandardError => e
@@ -175,7 +175,7 @@ class ScrappingWindguruJob < ApplicationJob
 
     report_info_formatted = {}
     report_info["report"].each_with_index do |(date_str, data), index|
-      date_formatted = (initial_day + index).strftime("%d. %b. %Y").downcase
+      date_formatted = (initial_day + index).strftime("%d. %b %Y").downcase
       if date_formatted[0] == "0" then date_formatted[0] = "" end
       report_info_formatted[date_formatted] = data
       report_info_formatted[date_formatted]["tides"] = report_tide[date_formatted] if report_tide[date_formatted]
