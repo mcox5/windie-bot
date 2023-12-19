@@ -2,19 +2,19 @@
 
 # Setup heroku application remotes
 if heroku auth:whoami &> /dev/null; then
-  if heroku apps:info --app pl-my-api-staging &> /dev/null; then
-    git remote add staging git@heroku.com:pl-my-api-staging.git || true
+  if heroku apps:info --app pl-windie-staging &> /dev/null; then
+    git remote add staging git@heroku.com:pl-windie-staging.git || true
     git config heroku.remote staging
-    echo 'You are a collaborator on the "pl-my-api-staging" Heroku app'
+    echo 'You are a collaborator on the "pl-windie-staging" Heroku app'
   else
-    echo 'Ask for access to the "pl-my-api-staging" Heroku app'
+    echo 'Ask for access to the "pl-windie-staging" Heroku app'
   fi
 
-  if heroku apps:info --app pl-my-api-production &> /dev/null; then
-    git remote add production git@heroku.com:pl-my-api-production.git || true
-    echo 'You are a collaborator on the "pl-my-api-production" Heroku app'
+  if heroku apps:info --app pl-windie-production &> /dev/null; then
+    git remote add production git@heroku.com:pl-windie-production.git || true
+    echo 'You are a collaborator on the "pl-windie-production" Heroku app'
   else
-    echo 'Ask for access to the "pl-my-api-production" Heroku app'
+    echo 'Ask for access to the "pl-windie-production" Heroku app'
   fi
 else
   echo 'You need to login to heroku. Run "heroku login"'
