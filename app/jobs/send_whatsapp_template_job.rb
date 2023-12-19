@@ -7,7 +7,7 @@ class SendWhatsappTemplateJob < ApplicationJob
     @client = Twilio::REST::Client.new(TwilioConstants.account_sid, TwilioConstants.auth_token)
     message = @client.messages.create(
       content_sid: content_sid,
-      from: "whatsapp:#{TwilioConstants.sandbox_phone_number}",
+      from: "whatsapp:#{TwilioConstants.phone_number}",
       content_variables: content_variables.to_json,
       messaging_service_sid: TwilioConstants.messaging_service_sid,
       to: "whatsapp:#{phone}"
