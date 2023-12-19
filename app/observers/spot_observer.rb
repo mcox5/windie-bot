@@ -30,6 +30,6 @@ class SpotObserver < PowerTypes::Observer
       "14" => object.today_report_summary["tides"]["Hi"][1],
       "15" => user_alias,
       "16" => object.windguru_code
-    }
+    }.transform_values(&:to_s)
   end
 end
