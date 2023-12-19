@@ -34,15 +34,22 @@ class ScrappingWindguruJob < ApplicationJob
     url = "https://www.windguru.cz/#{windguru_code}"
     begin
       options = Selenium::WebDriver::Chrome::Options.new
-      options.add_argument('--disable-gpu')
       options.add_argument('--headless')
+      options.add_argument('--disable-dev-shm-usage')
       options.add_argument('--no-sandbox')
+      options.add_argument('--disable-gpu')
       options.add_argument('--disable-software-rasterizer')
-      options.binary = ENV['GOOGLE_CHROME_SHIM']
+      options.add_argument("--chromedriver-version=116.0.5845.96")
+
+
+      chrome_bin = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
+      options.binary = chrome_bin if chrome_bin
+
       driver = Selenium::WebDriver.for :chrome, options: options
       driver.get(url)
       sleep(6)
       windguru_table = Nokogiri::HTML(driver.page_source).search('#forecasts-page-content .tabulka')
+      puts 'esta es la tabla...', windguru_table
       report_info = transform_report_to_json(parse_windguru_table(windguru_table))
 
       tide_button = driver.find_elements(:css, '.wg-table-menu')[0].find_elements(:css, 'li')[6].find_elements(:css, 'a').first
