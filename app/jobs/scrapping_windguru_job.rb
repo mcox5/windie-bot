@@ -22,7 +22,8 @@ class ScrappingWindguruJob < ApplicationJob
 
   def perform(location_name)
     spot = Spot.find_by(name: location_name)
-    spot.update!(report: get_report_info_json(location_name).to_json, report_last_update: Time.zone.today)
+    report_info = get_report_info_json(location_name)
+    spot.update!(report: report_info.to_json, report_last_update: Time.zone.today)
   end
 
   private
@@ -33,7 +34,11 @@ class ScrappingWindguruJob < ApplicationJob
     url = "https://www.windguru.cz/#{windguru_code}"
     begin
       options = Selenium::WebDriver::Chrome::Options.new
-      options.add_argument('--headless --disable-dev-shm-usage --no-sandbox --disable-gpu --disable-software-rasterizer')
+      options.add_argument('--disable-gpu')
+      options.add_argument('--headless')
+      options.add_argument('--no-sandbox')
+      options.add_argument('--disable-software-rasterizer')
+      options.binary = ENV['GOOGLE_CHROME_SHIM']
       driver = Selenium::WebDriver.for :chrome, options: options
       driver.get(url)
       sleep(6)
