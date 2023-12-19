@@ -29,6 +29,10 @@ module TwilioConstants
   end
 
   def self.ask_spots_template_sid
-    @ask_spots_template_sid ||= ENV.fetch('TWILIO_ASK_SPOTS_TEMPLATE_SID')
+    @ask_spots_template_sid ||= ENV.fetch('TWILIO_ASK_SPOTS_BETA_TEMPLATE_SID')
+  end
+
+  def self.show_daily_report_template_sid
+    @show_daily_report_template_sid ||= ENV.fetch('TWILIO_SHOW_DAILY_REPORT_TEMPLATE_SID')
   end
 end
