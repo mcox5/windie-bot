@@ -28,6 +28,6 @@ module Windie
     config.active_job.queue_adapter = :sidekiq
     config.assets.paths << Rails.root.join('node_modules')
     config.load_defaults 7.0
-    config.time_zone = 'Santiago'
+    config.time_zone = 'America/Santiago'
   end
 end
