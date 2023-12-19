@@ -10,6 +10,5 @@ Rails.application.routes.draw do
     end
   end
   devise_for :users
-  mount CoverImageUploader.derivation_endpoint => "/derivations/cover_image"
   mount Sidekiq::Web => '/queue'
 end
