@@ -3,7 +3,7 @@ module WindguruLocations
     "pichilemu" => '98',
     "matanzas" => '42511',
     "topocalma" => '42514',
-    "puertecillo" => '419841',
+    "puertecillo" => '42514',
     "buchupureo" => '181995'
   }
 
