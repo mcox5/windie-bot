@@ -72,11 +72,11 @@ class Spot < ApplicationRecord
   end
 
   def today
-    @today ||= Time.zone.today.strftime("%d. %b. %Y").downcase
+    @today ||= Time.zone.today.strftime("%d. %b %Y").downcase
   end
 
   def tomorrow
-    @tomorrow ||= (Time.zone.today + 1).strftime("%d. %b. %Y").downcase
+    @tomorrow ||= (Time.zone.today + 1).strftime("%d. %b %Y").downcase
   end
 
   def average_report(data, hours)
