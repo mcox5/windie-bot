@@ -38,7 +38,85 @@ class User < ApplicationRecord
     self.alias
   end
 
+  def send_today_report
+    message = build_daily_report_message(user_spot.today_report_summary, "hoy")
+    SendFreeWhatsappJob.perform_now(phone, message)
+  end
+
+  def send_tomorrow_report
+    message = build_daily_report_message(user_spot.tomorrow_report_summary, "mañana")
+    SendFreeWhatsappJob.perform_now(phone, message)
+  end
+
+  def send_next_week_report
+    message = build_weekly_report_message(user_spot.next_week_report_summary)
+    SendFreeWhatsappJob.perform_now(phone, message)
+  end
+
+  def send_today_tides
+    message = build_tides_message(user_spot.today_tides)
+    SendFreeWhatsappJob.perform_now(phone, message)
+  end
+
+  def send_tomorrow_tides
+    message = build_tides_message(user_spot.tomorrow_tides)
+    SendFreeWhatsappJob.perform_now(phone, message)
+  end
+
+  def send_big_wave_report
+    message = build_big_wave_report_message(user_spot.big_wave_alert)
+    SendFreeWhatsappJob.perform_now(phone, message)
+  end
+
+  def send_error_message
+    SendFreeWhatsappJob.perform_now(phone, WhatsappMessages.message(:CONVERSATION, :ERROR))
+  end
+
+  def user_spot
+    @user_spot ||= spots.first
+  end
+
   private
+
+  def build_daily_report_message(report, day)
+    "Este es el reporte de #{day} para *#{user_spot.name}*:\n\n
+    En la *mañana* habrán olas de *#{report["morning"]["wave"]} metros*, viento de *#{report["morning"]["wind"]} nudos* con dirección *#{report["morning"]["wind_direction"]}* y periodo de *#{report["morning"]["period"]} segundos*.\n
+    En la *tarde* habrán olas de *#{report["afternoon"]["wave"]} metros*, viento de *#{report["afternoon"]["wind"]} nudos* con dirección #{report["afternoon"]["wind_direction"]} y periodo de *#{report["afternoon"]["period"]} segundos*.\n
+    Las *mareas bajas* serán a las #{report["tides"]["Lo"][0]} y #{report["tides"]["Lo"][1]}, y las *mareas altas* a las #{report["tides"]["Hi"][0]} y #{report["tides"]["Hi"][1]}.\n\n
+    Buenas olas #{user_alias}! 🤙🏼"
+  end
+
+  def build_weekly_report_message(weekly_report)
+    message = "Este es el reporte de la próxima semana en *#{user_spot.name}*:\n\n"
+    days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    weekly_report.each_with_index do |(date, report), index|
+      message += "#{days[index]} (#{date}):\n
+      En la *mañana* habrán olas de #{report["morning"]["wave"]}, viento de #{report["morning"]["wind"]} nudos con dirección #{report["morning"]["wind_direction"]} y periodo de *#{report["morning"]["period"]} segundos*.\n
+      En la *tarde* habrán olas de #{report["afternoon"]["wave"]}, viento de #{report["afternoon"]["wind"]} nudos con dirección #{report["afternoon"]["wind_direction"]} y periodo de *#{report["afternoon"]["period"]} segundos*.\n
+      Las *mareas bajas* serán a las #{report["tides"]["Lo"].join(' y ')}, y las *mareas altas* a las #{report["tides"]["Hi"].join(' y ')}."
+    end
+    message
+  end
+
+  def build_tides_message(tides)
+    "Las mareas para hoy en *#{user_spot.name}* son:\n\n
+    Las *mareas bajas* serán a las *#{tides["Lo"].join(' y ')}*, y las *mareas altas* a las *#{tides["Hi"].join(' y ')}*."
+  end
+
+  def build_big_wave_report_message(big_wave_report)
+    return "No hay olas grandes dentro de la próxima semana 🙁" if big_wave_report === "No big waves in the next week"
+
+    message = "🌊🌊🌊 Habrán olas grandes dentro de la próxima semana en #{user_spot.name}:\n\n"
+    big_wave_report.each do |date, report|
+      message += "#{date}:\n
+      En la *mañana* habrán olas de *#{report["morning"]["wave"]} metros*, viento de *#{report["morning"]["wind"]} nudos* con dirección *#{report["morning"]["wind_direction"]}* y periodo de *#{report["morning"]["period"]} segundos*.\n
+      En la *tarde* habrán olas de *#{report["afternoon"]["wave"]} metros*, viento de *#{report["afternoon"]["wind"]} nudos* con dirección *#{report["afternoon"]["wind_direction"]}* y periodo de *#{report["afternoon"]["period"]} segundos*.\n
+      Las *mareas bajas* serán a las #{report["tides"]["Lo"].join(' y ')}, y las *mareas altas* a las #{report["tides"]["Hi"].join(' y ')}.\n\n
+      Buenos olones #{user_alias}! 🤙🏼"
+    end
+    message
+  end
+
 
   def ask_alias_message
     SendFreeWhatsappJob.perform_now(phone, WhatsappMessages.message(:REGISTRATION, :ASK_ALIAS))
@@ -53,7 +131,7 @@ class User < ApplicationRecord
   end
 
   def show_features
-    SendFreeWhatsappJob.perform_now(phone, WhatsappMessages.message(:REGISTRATION, :SHOW_WINDIE_FEATURES))
+    SendFreeWhatsappJob.perform_now(phone, WhatsappMessages.message(:REGISTRATION, :SHOW_WINDIE_FEATURES_BETA))
   end
 
   def get_whatsapp_variables_for_asking_sport(user_alias)

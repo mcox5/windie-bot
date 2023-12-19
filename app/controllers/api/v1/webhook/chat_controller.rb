@@ -12,7 +12,7 @@ class Api::V1::Webhook::ChatController < Api::V1::Webhook::BaseController
     when 'waiting_for_spots'
       handle_spots_response
     when 'registered'
-      handle_any_response
+      handle_conversation
     end
   end
 
@@ -58,7 +58,23 @@ class Api::V1::Webhook::ChatController < Api::V1::Webhook::BaseController
     respond_with user, status: :ok
   end
 
-  def handle_any_response
-    respond_with user, status: :ok
+  def handle_conversation
+    response = params[:Body].downcase
+    case response
+    when 'reporte de hoy'
+      user.send_today_report
+    when 'reporte de mañana'
+      user.send_tomorrow_report
+    when 'reporte de la proxima semana'
+      user.send_next_week_report
+    when 'reporte de mareas hoy'
+      user.send_today_tides
+    when 'reporte de mareas mañana'
+      user.send_tomorrow_tides
+    when 'olas grandes en la proxima semana'
+      user.send_big_wave_report
+    else
+      user.send_error_message
+    end
   end
 end
