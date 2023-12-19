@@ -7,3 +7,17 @@ production:
   #    cron: '0 * * * * *'  # Runs once per minute
   #    class: ExampleJob
   #    args: ['a', 'b']
+:scheduler:
+  :schedule:
+    scrapping_windguru_pichilemu:
+      cron: '0 5 * * * *'  # Runs once per day at 5:00 AM
+      class: ScrappingWindguruJob
+      args: ['pichilemu']
+    scrapping_windguru_matanzas:
+      cron: '0 5 * * * *'  # Runs once per day at 5:00 AM
+      class: ScrappingWindguruJob
+      args: ['matanzas']
+    scrapping_windguru_puertecillo:
+      cron: '0 5 * * * *'  # Runs once per day at 5:00 AM
+      class: ScrappingWindguruJob
+      args: ['puertecillo']
