@@ -29,7 +29,7 @@ class ScrappingWindguruJob < ApplicationJob
   private
 
   def get_report_info_json(location_name)
-    puts 'Starting web_scrapping_windguru....'
+    puts "Starting web_scrapping_windguru for #{location_name}"
     windguru_code = WindguruLocations.code(location_name)
     url = "https://www.windguru.cz/#{windguru_code}"
     begin
@@ -56,7 +56,7 @@ class ScrappingWindguruJob < ApplicationJob
 
       report_tide = get_report_tide(driver)
       complete_report = fusion_reports(report_info, report_tide)
-      puts 'este es el reporte', complete_report
+      puts "scrapping finalizado para #{location_name}", complete_report
 
       complete_report
     rescue StandardError => e
