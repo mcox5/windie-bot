@@ -2,7 +2,7 @@ class SpotObserver < PowerTypes::Observer
   before_update :send_report_whatsapp
 
   def send_report_whatsapp
-    return unless !object.today_report_summary["morning"].empty?
+    return unless !object.today_report_summary["morning"].empty? && object.users.any?
 
     object.users.each do |user|
       today_report_variables = today_report_variables(user.user_alias)
@@ -24,10 +24,10 @@ class SpotObserver < PowerTypes::Observer
       "8" => object.today_report_summary["afternoon"]["wind"],
       "9" => object.today_report_summary["afternoon"]["wind_direction"],
       "10" => object.today_report_summary["afternoon"]["period"],
-      "11" => object.today_report_summary["tides"]["Lo"][0],
-      "12" => object.today_report_summary["tides"]["Lo"][1],
-      "13" => object.today_report_summary["tides"]["Hi"][0],
-      "14" => object.today_report_summary["tides"]["Hi"][1],
+      "11" => object.today_report_summary["tides"]["Lo"][0] || "-",
+      "12" => object.today_report_summary["tides"]["Lo"][1] || "-",
+      "13" => object.today_report_summary["tides"]["Hi"][0] || "-",
+      "14" => object.today_report_summary["tides"]["Hi"][1] || "-",
       "15" => user_alias,
       "16" => object.windguru_code
     }.transform_values(&:to_s)
