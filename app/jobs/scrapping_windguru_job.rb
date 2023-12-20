@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'selenium-webdriver'
 require 'json'
+require 'sidekiq-scheduler'
 
 SPANISH_MONTHS = {
   'ene.' => 'Jan',
@@ -18,6 +19,7 @@ SPANISH_MONTHS = {
 }
 
 class ScrappingWindguruJob < ApplicationJob
+  include Sidekiq::Worker
   queue_as :default
 
   def perform(location_name)
