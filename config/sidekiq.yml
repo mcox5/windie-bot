@@ -10,14 +10,14 @@ production:
 :scheduler:
   :schedule:
     scrapping_windguru_pichilemu:
-      cron: '0 5 * * * * America/Santiago'  # Runs once per day at 5:00 AM
+      cron: '0 * * * * * America/Santiago'  # Runs per minute at 5:00 AM
       class: ScrappingWindguruJob
-      args: ['pichilemu']
+      args: 'pichilemu'
     scrapping_windguru_matanzas:
-      cron: '0 5 * * * * America/Santiago'  # Runs once per day at 5:00 AM
+      cron: '0 * * * * * America/Santiago'  # Runs once per minute at 5:00 AM
       class: ScrappingWindguruJob
-      args: ['matanzas']
+      args: 'matanzas'
     scrapping_windguru_puertecillo:
-      cron: '0 5 * * * * America/Santiago'  # Runs once per day at 5:00 AM
+      cron: '0 * * * * * America/Santiago'  # Runs once per minute at 5:00 AM
       class: ScrappingWindguruJob
-      args: ['puertecillo']
+      args: 'puertecillo'
